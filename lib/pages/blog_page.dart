@@ -8,11 +8,10 @@ import 'package:revochampblog/core/meta_service.dart';
 import 'package:revochampblog/models/blog_post.dart';
 import 'package:revochampblog/models/content_item.dart';
 import 'package:revochampblog/services/blog_service.dart';
-import 'package:revochampblog/widgets/blog_designs.dart';
-import 'package:revochampblog/widgets/blogdesign/minimal_design.dart';
-import 'package:revochampblog/widgets/blogdesign/news_blog_design.dart';
 import 'package:revochampblog/widgets/blogdesign/news_paper_blog.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../widgets/error_widget.dart';
 
 const String _baseBlogUrl = 'https://tech.revochamp.site/blog';
 const int _maxCacheSize = 20;
@@ -66,7 +65,7 @@ class _BlogPageState extends State<BlogPage> {
       return post;
     }
 
-    final post = await BlogService().fetchBlogPost(slug);
+    final post = await BlogService().fetchBySlug(slug);
 
     _cache[slug] = post;
     if (_cache.length > _maxCacheSize) {
@@ -132,17 +131,15 @@ class _BlogPageState extends State<BlogPage> {
           );
         }
 
-        if (snapshot.hasError) {
-          return Scaffold(
-            body: Center(
-              child: ElevatedButton(
-                onPressed: () =>
-                    setState(() => _futurePost = _loadBlogPost()),
-                child: const Text('Retry'),
-              ),
-            ),
-          );
-        }
+      // In build(), inside FutureBuilder:
+if (snapshot.hasError) {
+  return Scaffold(
+    body: BlogErrorWidget(
+      onRetry: () => setState(() => _futurePost = _loadBlogPost()),
+      message: 'Could not load this article.',
+    ),
+  );
+}
 
         final post = snapshot.data!;
 
@@ -162,21 +159,21 @@ class _BlogPageState extends State<BlogPage> {
 
   Widget _getDesign(BlogPost post) {
     switch (post.design) {
-      case BlogDesign.minimal:
-        return MinimalBlogDesign(
-          post: post,
-          scrollController: _scrollController,
-          onCopyCode: _copyCode,
-          slug: widget.slug,
-        );
+      // case BlogDesign.minimal:
+      //   return MinimalBlogDesign(
+      //     post: post,
+      //     scrollController: _scrollController,
+      //     onCopyCode: _copyCode,
+      //     slug: widget.slug,
+      //   );
 
-      case BlogDesign.magazine:
-        return MagazineBlogDesign(
-          post: post,
-          scrollController: _scrollController,
-          onCopyCode: _copyCode,
-          slug: widget.slug,
-        );
+      // case BlogDesign.magazine:
+      //   return MagazineBlogDesign(
+      //     post: post,
+      //     scrollController: _scrollController,
+      //     onCopyCode: _copyCode,
+      //     slug: widget.slug,
+      //   );
 
       case BlogDesign.newspaper:
         return NewspaperBlogDesign1(
@@ -186,24 +183,24 @@ class _BlogPageState extends State<BlogPage> {
           slug: widget.slug,
         );
 
-      case BlogDesign.stackedCardBlogDesign:
-        return StackedCardBlogDesign(
-          post: post,
-          scrollController: _scrollController,
-          onCopyCode: _copyCode,
-          slug: widget.slug,
-        );
+      // case BlogDesign.stackedCardBlogDesign:
+      //   return StackedCardBlogDesign(
+      //     post: post,
+      //     scrollController: _scrollController,
+      //     onCopyCode: _copyCode,
+      //     slug: widget.slug,
+      //   );
 
-      case BlogDesign.coverstory:
-        return CoverStoryBlogDesign(
-          post: post,
-          scrollController: _scrollController,
-          onCopyCode: _copyCode,
-          slug: widget.slug,
-        );
+      // case BlogDesign.coverstory:
+      //   return CoverStoryBlogDesign(
+      //     post: post,
+      //     scrollController: _scrollController,
+      //     onCopyCode: _copyCode,
+      //     slug: widget.slug,
+      //   );
 
       default:
-        return MagazineBlogDesign(
+        return NewspaperBlogDesign1(
           post: post,
        scrollController: _scrollController,
           onCopyCode: _copyCode,

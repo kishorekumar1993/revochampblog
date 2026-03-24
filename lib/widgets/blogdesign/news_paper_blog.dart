@@ -44,6 +44,52 @@ class _T {
       );
 }
 
+String getJournalName(List<String> categories) {
+  if (categories.isEmpty) return 'RevoChamp Journal';
+
+  final c = categories.map((e) => e.toLowerCase()).toList();
+
+  if (c.contains('crm')) return 'CRM Journal';
+  if (c.contains('insurance')) return 'Insurance Journal';
+  if (c.contains('ai')) return 'AI Journal';
+  if (c.contains('technology') || c.contains('tech')) return 'Tech Journal';
+  if (c.contains('analytics')) return 'Analytics Journal';
+
+  return 'RevoChamp Journal';
+}
+
+String formatCategories(List<String> categories) {
+  if (categories.isEmpty) return 'General';
+
+  if (categories.length <= 2) {
+    return categories.join(' • ');
+  }
+
+  return '${categories.take(2).join(' • ')} +${categories.length - 2}';
+}
+
+// String formatDate(String? date) {
+//   if (date == null || date.isEmpty) return '';
+
+//   final parsed = DateTime.tryParse(date);
+//   if (parsed == null) return date; // fallback (avoid crash)
+
+//   const months = [
+//     '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+//     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+//   ];
+
+//   return '${months[parsed.month]} ${parsed.year}';
+// }
+String formatDate(DateTime date) {
+  const months = [
+    '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+
+  return '${months[date.month]} ${date.year}';
+}
+
 // ─────────────────────────────────────────────────────────────
 //  MAIN DESIGN
 // ─────────────────────────────────────────────────────────────
@@ -72,36 +118,143 @@ class NewspaperBlogDesign1 extends StatelessWidget {
         controller: scrollController,
         slivers: [
           // ── Sticky masthead ──────────────────────────────────
-          SliverAppBar(
-            pinned: true,
-            backgroundColor: _T.paper,
-            elevation: 0,
-            centerTitle: true,
-            flexibleSpace: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      Text('RevoChamp',
-                          style: _T.label(11, color: _T.accent)),
-                      const Spacer(),
-                      Text('CRM Journal · March 2026',
-                          style: _T.label(11)),
-                      const Spacer(),
-                      Text('Strategy & Technology',
-                          style: _T.label(11)),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Divider(height: 1, thickness: 1.5, color: _T.ink),
-              ],
-            ),
-            toolbarHeight: 44,
+          // SliverAppBar(
+          //   pinned: true,
+          //   backgroundColor: _T.paper,
+          //   elevation: 0,
+          //   centerTitle: true,
+          //   flexibleSpace: Column(
+          //     mainAxisAlignment: MainAxisAlignment.end,
+          //     children: [
+          //       Padding(
+          //         padding: const EdgeInsets.symmetric(horizontal: 20),
+          //         child: Row(
+          //           children: [
+          //             Text('RevoChamp',
+          //                 style: _T.label(11, color: _T.accent)),
+          //             const Spacer(),
+          //             Text('CRM Journal · March 2026',
+          //                 style: _T.label(11)),
+          //             const Spacer(),
+          //             Text('Strategy & Technology',
+          //                 style: _T.label(11)),
+          //           ],
+          //         ),
+          //       ),
+          //       const SizedBox(height: 8),
+          //       const Divider(height: 1, thickness: 1.5, color: _T.ink),
+          //     ],
+          //   ),
+          //   toolbarHeight: 44,
+          // ),
+SliverAppBar(
+  pinned: true,
+  backgroundColor: _T.paper,
+  elevation: 0,
+  toolbarHeight: 60,
+  automaticallyImplyLeading: false,
+  flexibleSpace: SafeArea(
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: _T.ink.withOpacity(0.12),
+            width: 1,
           ),
+        ),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 600;
 
+          final blog = post;
+
+          final journal = getJournalName(blog.categories);
+          final date = formatDate(blog!.date!);
+          final categoryText = formatCategories(blog.categories);
+
+          return Row(
+            children: [
+              /// LEFT → BRAND
+              Row(
+                children: [
+                  Icon(Icons.bolt_rounded, size: 18, color: _T.accent),
+                  const SizedBox(width: 6),
+                  Text(
+                    'RevoChamp',
+                    style: _T.label(13, color: _T.accent),
+                  ),
+                ],
+              ),
+
+              const Spacer(),
+
+              /// CENTER → JOURNAL + DATE
+              if (!isMobile)
+                Row(
+                  children: [
+                    Text(
+                      journal,
+                      style: _T.label(
+                        11,
+                        color: _T.ink.withOpacity(0.8),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      width: 4,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: _T.ink.withOpacity(0.4),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      date,
+                      style: _T.label(
+                        11,
+                        color: _T.ink.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                ),
+
+              const Spacer(),
+
+              /// RIGHT → CATEGORY BADGE
+              Row(
+                children: [
+                  if (!isMobile)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: _T.accent.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          color: _T.accent.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Text(
+                        categoryText,
+                        style: _T.label(10, color: _T.accent),
+                      ),
+                    ),
+
+                  if (isMobile)
+                    Icon(Icons.menu_rounded,
+                        size: 20, color: _T.ink.withOpacity(0.7)),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    ),
+  ),
+),
           SliverToBoxAdapter(
             child: Center(
               child: ConstrainedBox(
@@ -176,6 +329,115 @@ class NewspaperBlogDesign1 extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────
 //  HERO SECTION
 // ─────────────────────────────────────────────────────────────
+// class _HeroSection extends StatelessWidget {
+//   final BlogPost post;
+//   final bool isDesktop;
+
+//   const _HeroSection({required this.post, required this.isDesktop});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final stats = [
+//       _StatItem(value: '34%', label: 'Increase in sales productivity with AI'),
+//       _StatItem(value: '3×', label: 'Higher engagement via omnichannel'),
+//       _StatItem(value: '89%', label: 'Customer retention — omnichannel firms'),
+//     ];
+
+//     final leftBlock = Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         // Category pill
+//         Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+//           color: _T.accent,
+//           child: Text(
+//             post.categories.take(3).join(' · ').toUpperCase(),
+//             style: _T.label(10, color: Colors.white),
+//           ),
+//         ),
+//         const SizedBox(height: 16),
+
+//         // Title
+//         Text(post.title,
+//             style: _T.display(
+//                 isDesktop ? 38 : 26,
+//                 w: FontWeight.w700)),
+//         const SizedBox(height: 12),
+
+//         // Subtitle
+//         if (post.subtitle.isNotEmpty)
+//           Text(post.subtitle,
+//               style: _T.body(15, color: _T.muted)),
+//         const SizedBox(height: 20),
+
+//         // Meta bar
+//         Container(
+//           padding: const EdgeInsets.symmetric(vertical: 10),
+//           decoration: const BoxDecoration(
+//             border: Border(
+//               top: BorderSide(color: _T.border),
+//               bottom: BorderSide(color: _T.border),
+//             ),
+//           ),
+//           child: Wrap(
+//             spacing: 24,
+//             runSpacing: 4,
+//             children: [
+//               _MetaChip(label: 'By', value: post.author),
+//               _MetaChip(label: 'Date', value: '24 March 2026'),
+//               _MetaChip(label: 'Read', value: post.readTime),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+
+//     final rightBlock = Column(
+//       children: stats
+//           .map((s) => Padding(
+//                 padding: const EdgeInsets.only(bottom: 20),
+//                 child: _HeroStat(value: s.value, label: s.label),
+//               ))
+//           .toList(),
+//     );
+
+//     if (isDesktop) {
+//       return Row(
+//         crossAxisAlignment: CrossAxisAlignment.end,
+//         children: [
+//           Expanded(flex: 55, child: leftBlock),
+//           const SizedBox(width: 40),
+//           Expanded(flex: 45, child: rightBlock),
+//         ],
+//       );
+//     }
+
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         leftBlock,
+//         const SizedBox(height: 28),
+//         Row(
+//           children: stats
+//               .map((s) => Expanded(
+//                     child: Padding(
+//                       padding: const EdgeInsets.only(right: 8),
+//                       child: _HeroStat(value: s.value, label: s.label),
+//                     ),
+//                   ))
+//               .toList(),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+// class _StatItem {
+//   final String value;
+//   final String label;
+//   _StatItem({required this.value, required this.label});
+// }
+
 class _HeroSection extends StatelessWidget {
   final BlogPost post;
   final bool isDesktop;
@@ -184,16 +446,11 @@ class _HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stats = [
-      _StatItem(value: '34%', label: 'Increase in sales productivity with AI'),
-      _StatItem(value: '3×', label: 'Higher engagement via omnichannel'),
-      _StatItem(value: '89%', label: 'Customer retention — omnichannel firms'),
-    ];
+    final stats = post.stats.take(3).toList();
 
     final leftBlock = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Category pill
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           color: _T.accent,
@@ -204,20 +461,16 @@ class _HeroSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
 
-        // Title
-        Text(post.title,
-            style: _T.display(
-                isDesktop ? 38 : 26,
-                w: FontWeight.w700)),
+        Text(
+          post.title,
+          style: _T.display(isDesktop ? 38 : 26, w: FontWeight.w700),
+        ),
         const SizedBox(height: 12),
 
-        // Subtitle
         if (post.subtitle.isNotEmpty)
-          Text(post.subtitle,
-              style: _T.body(15, color: _T.muted)),
+          Text(post.subtitle, style: _T.body(15, color: _T.muted)),
         const SizedBox(height: 20),
 
-        // Meta bar
         Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: const BoxDecoration(
@@ -239,22 +492,32 @@ class _HeroSection extends StatelessWidget {
       ],
     );
 
-    final rightBlock = Column(
-      children: stats
-          .map((s) => Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: _HeroStat(value: s.value, label: s.label),
-              ))
-          .toList(),
-    );
+    /// ✅ Hide stats if empty
+    final hasStats = stats.isNotEmpty;
+
+    final rightBlock = hasStats
+        ? Column(
+            children: stats
+                .map((s) => Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: _HeroStat(
+                        value: s.value,
+                        label: s.label,
+                      ),
+                    ))
+                .toList(),
+          )
+        : const SizedBox();
 
     if (isDesktop) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(flex: 55, child: leftBlock),
-          const SizedBox(width: 40),
-          Expanded(flex: 45, child: rightBlock),
+          if (hasStats) ...[
+            const SizedBox(width: 40),
+            Expanded(flex: 45, child: rightBlock),
+          ]
         ],
       );
     }
@@ -263,26 +526,25 @@ class _HeroSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         leftBlock,
-        const SizedBox(height: 28),
-        Row(
-          children: stats
-              .map((s) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: _HeroStat(value: s.value, label: s.label),
-                    ),
-                  ))
-              .toList(),
-        ),
+        if (hasStats) ...[
+          const SizedBox(height: 28),
+          Row(
+            children: stats
+                .map((s) => Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: _HeroStat(
+                          value: s.value,
+                          label: s.label,
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ),
+        ]
       ],
     );
   }
-}
-
-class _StatItem {
-  final String value;
-  final String label;
-  _StatItem({required this.value, required this.label});
 }
 
 class _HeroStat extends StatelessWidget {
@@ -701,11 +963,11 @@ class _ContentImage extends StatelessWidget {
               imageUrl: url,
               fit: BoxFit.cover,
               width: double.infinity,
-              placeholder: (_, __) => Container(
+              placeholder: (_, _) => Container(
                   height: 200,
                   color: _T.border,
                   child: const Center(child: CircularProgressIndicator())),
-              errorWidget: (_, __, ___) =>
+              errorWidget: (_, _, _) =>
                   const Icon(Icons.broken_image),
             ),
           ),

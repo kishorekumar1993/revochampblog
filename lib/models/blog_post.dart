@@ -20,8 +20,11 @@ class BlogPost {
   final List<String> tags;
   final String readTime;
   final String? featuredImage;
+final List<StatItem> stats;
+
   final List<ContentItem> content;
   final Map<String, String>? meta; // for custom meta title/description
+
   final List<Map<String, String>>? faq;
   final List<String> related;
     final String? authorAvatar;
@@ -39,6 +42,7 @@ class BlogPost {
     required this.readTime,
     this.featuredImage,
     required this.content,
+     this.stats = const [],   // ✅ ADD THIS
     this.meta,
 this.authorAvatar,
     this.videoUrl,
@@ -58,6 +62,12 @@ this.authorAvatar,
       tags: List<String>.from(json['tags'] ?? []),
       readTime: json['readTime'] as String? ?? '5 min read',
       featuredImage: json['featuredImage'] as String?,
+    
+    // ✅ NEW
+    stats: (json['stats'] as List<dynamic>?)
+            ?.map((e) => StatItem.fromJson(e))
+            .toList() ??
+        [],
       content: (json['content'] as List)
           .map((item) => ContentItem.fromJson(item))
           .toList(),
@@ -68,6 +78,23 @@ this.authorAvatar,
           ? List<Map<String, String>>.from(json['faq'].map((f) => Map<String, String>.from(f)))
           : null,
       related: List<String>.from(json['related'] ?? []),
+    );
+  }
+}
+
+class StatItem {
+  final String value;
+  final String label;
+
+  StatItem({
+    required this.value,
+    required this.label,
+  });
+
+  factory StatItem.fromJson(Map<String, dynamic> json) {
+    return StatItem(
+      value: json['value'] ?? '',
+      label: json['label'] ?? '',
     );
   }
 }

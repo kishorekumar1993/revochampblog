@@ -422,17 +422,17 @@ class NpImage extends StatelessWidget {
                     imageUrl: url,
                     fit: BoxFit.cover,
                     width: double.infinity,
-                    placeholder: (_, __) => Container(
+                    placeholder: (_, _) => Container(
                         height: 200,
                         color: _T.border,
                         child: const Center(
                             child: CircularProgressIndicator(
                                 color: _T.accent))),
-                    errorWidget: (_, __, ___) => _brokenImage(),
+                    errorWidget: (_, _, _) => _brokenImage(),
                   )
                 : Image.asset(url,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => _brokenImage()),
+                    errorBuilder: (_, _, _) => _brokenImage()),
           ),
           if (caption != null && caption!.isNotEmpty) ...[
             const SizedBox(height: 8),

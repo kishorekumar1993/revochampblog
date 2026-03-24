@@ -3,6 +3,7 @@ import 'package:revochampblog/pages/blog_list_page.dart';
 import 'package:revochampblog/pages/blog_page.dart';
 
 void main() {
+WidgetsFlutterBinding.ensureInitialized(); // ADD THIS
   runApp(MyApp());
 }
 
@@ -18,18 +19,30 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home handles the root route "/"
       home: const BlogListPage(),
-      onGenerateRoute: (settings) {
-        if (settings.name?.startsWith('/blog/') ?? false) {
-          final slug = settings.name!.substring('/blog/'.length);
-          return MaterialPageRoute(
+     onGenerateRoute: (settings) {
+    if (settings.name == '/') {
+      return MaterialPageRoute(builder: (_) => BlogListPage());
+    }
+    if (settings.name!.startsWith('/blog/')) {
+      final slug = settings.name!.substring(6); // remove '/blog/'
+      return MaterialPageRoute(
+        builder: (_) => BlogPage(slug: slug),
+      );
+    }
+    return null;
+  },
+      // onGenerateRoute: (settings) {
+      //   if (settings.name?.startsWith('/blog/') ?? false) {
+      //     final slug = settings.name!.substring('/blog/'.length);
+      //     return MaterialPageRoute(
             
-            builder: (context) => BlogPage(slug: slug),
-            // builder: (context) => BlogPage(slug: slug),
-          );
-        }
-        // For any other route, return null (will show error, but we won't use them)
-        return null;
-      },
+      //       builder: (context) => BlogPage(slug: slug),
+      //       // builder: (context) => BlogPage(slug: slug),
+      //     );
+      //   }
+      //   // For any other route, return null (will show error, but we won't use them)
+      //   return null;
+      // },
     );
   }
 }

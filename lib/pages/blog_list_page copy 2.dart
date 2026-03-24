@@ -1303,8 +1303,6 @@ String formatDate(DateTime date) {
 //       ),
 //     );
 //   }
-//   List<String> _categories = [];
-//   String? _activeCat;
 
 //   // ── Sliver Header (masthead + hero) ──────────────────────
 //   Widget _buildSliverHeader() {
@@ -1322,35 +1320,11 @@ String formatDate(DateTime date) {
 //           ),
 //           const _HeroHeader(),
 //           // Category bar removed because categories not in summary
-//           _CategoryBar(
-//             categories: _categories,
-//             active: _activeCat,
-//             onSelect: (c) => setState(() {
-//               _activeCat = c;
-//               _filter();
-//             }),
-//           ),
 //         ],
 //       ),
 //     );
 //   }
 
-//   void _filter() {
-//     var list = _all;
-//     if (_activeCat != null) {
-//       list = list.where((p) => p.categories.contains(_activeCat)).toList();
-//     }
-//     if (_query.isNotEmpty) {
-//       list = list
-//           .where(
-//             (p) =>
-//                 p.title.toLowerCase().contains(_query.toLowerCase()) ||
-//                 p.subtitle.toLowerCase().contains(_query.toLowerCase()),
-//           )
-//           .toList();
-//     }
-//     _filtered = list;
-//   }
 //   // ── Post list ─────────────────────────────────────────────
 //   Widget _buildList() {
 //     return LayoutBuilder(
@@ -2601,73 +2575,73 @@ String formatDate(DateTime date) {
 // // // ─────────────────────────────────────────────────────────────
 // // //  CATEGORY FILTER BAR
 // // // ─────────────────────────────────────────────────────────────
-// class _CategoryBar extends StatelessWidget {
-//   final List<String> categories;
-//   final String? active;
-//   final ValueChanged<String?> onSelect;
+// // class _CategoryBar extends StatelessWidget {
+// //   final List<String> categories;
+// //   final String? active;
+// //   final ValueChanged<String?> onSelect;
 
-//   const _CategoryBar({
-//     required this.categories,
-//     required this.active,
-//     required this.onSelect,
-//   });
+// //   const _CategoryBar({
+// //     required this.categories,
+// //     required this.active,
+// //     required this.onSelect,
+// //   });
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final all = ['All', ...categories];
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     final all = ['All', ...categories];
 
-//     return Container(
-//       color: _T.paper,
-//       child: Column(
-//         children: [
-//           SizedBox(
-//             height: 48,
-//             child: ListView.builder(
-//               scrollDirection: Axis.horizontal,
-//               padding: const EdgeInsets.symmetric(horizontal: 16),
-//               itemCount: all.length,
-//               itemBuilder: (_, i) {
-//                 final cat = all[i];
-//                 final isActive = i == 0 ? active == null : active == cat;
+// //     return Container(
+// //       color: _T.paper,
+// //       child: Column(
+// //         children: [
+// //           SizedBox(
+// //             height: 48,
+// //             child: ListView.builder(
+// //               scrollDirection: Axis.horizontal,
+// //               padding: const EdgeInsets.symmetric(horizontal: 16),
+// //               itemCount: all.length,
+// //               itemBuilder: (_, i) {
+// //                 final cat = all[i];
+// //                 final isActive = i == 0 ? active == null : active == cat;
 
-//                 return GestureDetector(
-//                   onTap: () => onSelect(i == 0 ? null : cat),
-//                   child: Padding(
-//                     padding: const EdgeInsets.only(right: 24),
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         AnimatedDefaultTextStyle(
-//                           duration: const Duration(milliseconds: 180),
-//                           style: isActive
-//                               ? _T.label(13, color: _T.ink)
-//                               : _T.body(
-//                                   13,
-//                                   color: _T.muted,
-//                                   w: FontWeight.w300,
-//                                 ),
-//                           child: Text(cat),
-//                         ),
-//                         const SizedBox(height: 4),
-//                         AnimatedContainer(
-//                           duration: const Duration(milliseconds: 180),
-//                           height: 1.5,
-//                           width: isActive ? 20 : 0,
-//                           color: _T.accent,
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//           ),
-//           const Divider(height: 1, thickness: 1, color: _T.border),
-//         ],
-//       ),
-//     );
-//   }
-// }
+// //                 return GestureDetector(
+// //                   onTap: () => onSelect(i == 0 ? null : cat),
+// //                   child: Padding(
+// //                     padding: const EdgeInsets.only(right: 24),
+// //                     child: Column(
+// //                       mainAxisAlignment: MainAxisAlignment.center,
+// //                       children: [
+// //                         AnimatedDefaultTextStyle(
+// //                           duration: const Duration(milliseconds: 180),
+// //                           style: isActive
+// //                               ? _T.label(13, color: _T.ink)
+// //                               : _T.body(
+// //                                   13,
+// //                                   color: _T.muted,
+// //                                   w: FontWeight.w300,
+// //                                 ),
+// //                           child: Text(cat),
+// //                         ),
+// //                         const SizedBox(height: 4),
+// //                         AnimatedContainer(
+// //                           duration: const Duration(milliseconds: 180),
+// //                           height: 1.5,
+// //                           width: isActive ? 20 : 0,
+// //                           color: _T.accent,
+// //                         ),
+// //                       ],
+// //                     ),
+// //                   ),
+// //                 );
+// //               },
+// //             ),
+// //           ),
+// //           const Divider(height: 1, thickness: 1, color: _T.border),
+// //         ],
+// //       ),
+// //     );
+// //   }
+// // }
 
 // // // ─────────────────────────────────────────────────────────────
 // // //  DESKTOP LAYOUT  (feature card left + grid right)
