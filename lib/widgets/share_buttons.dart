@@ -27,8 +27,7 @@ class ShareButtons extends StatelessWidget {
   }
 
   void _share(BuildContext context) async {
-    // You can use share_plus package or custom share via URL
-    // For now, just copy URL to clipboard
+
     await Clipboard.setData(ClipboardData(text: url));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Link copied to clipboard!')),

@@ -133,7 +133,7 @@ mixin ContentBuilder {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
@@ -156,7 +156,7 @@ mixin ContentBuilder {
       margin: const EdgeInsets.symmetric(vertical: 24),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(0.1),
+        color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -174,7 +174,6 @@ mixin ContentBuilder {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              // TODO: handle navigation
             },
             child: Text(cta.buttonText),
           ),

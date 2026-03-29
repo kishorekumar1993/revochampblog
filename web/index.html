@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -14,25 +14,375 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="$FLUTTER_BASE_HREF">
-
+  <!-- <base href="$FLUTTER_BASE_HREF"> -->
+  <base href="/blog/">
+<meta name="google-site-verification" content="56YLlB_RvfQRzIYP_38zH5rvbOppQmeWgvZvlXYu358" />
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <!-- iOS meta tags & icons -->
+  <!-- Primary SEO Meta Tags -->
+  <title>RevoChamp Blog | Insights, Stories & Tech Trends</title>
+  <meta name="title" content="RevoChamp Blog | Insights, Stories & Tech Trends">
+  <meta name="description" content="Explore RevoChamp Blog — deep dives into technology, lifestyle innovations, creative storytelling, and expert insights. Fresh perspectives for curious minds.">
+  <meta name="keywords" content="RevoChamp, blog, technology, lifestyle, innovation, tech blog, stories, insights, programming, design, productivity">
+  <meta name="author" content="RevoChamp Team">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revisit-after" content="7 days">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://revochamp.com/blog/">
+  <meta property="og:title" content="RevoChamp Blog | Insights, Stories & Tech Trends">
+  <meta property="og:description" content="Explore RevoChamp Blog — deep dives into technology, lifestyle innovations, creative storytelling, and expert insights. Fresh perspectives for curious minds.">
+  <meta property="og:image" content="https://revochamp.com/images/og-blog-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="RevoChamp Blog">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://revochamp.com/blog/">
+  <meta name="twitter:title" content="RevoChamp Blog | Insights, Stories & Tech Trends">
+  <meta name="twitter:description" content="Explore RevoChamp Blog — deep dives into technology, lifestyle innovations, creative storytelling, and expert insights. Fresh perspectives for curious minds.">
+  <meta name="twitter:image" content="https://revochamp.com/images/twitter-blog-preview.jpg">
+
+  <!-- Structured Data (JSON-LD) for Blog / WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "RevoChamp Blog",
+    "url": "https://revochamp.com/blog/",
+    "description": "RevoChamp Blog delivers high-quality articles on technology, lifestyle, innovation, and creative storytelling. Join our community of curious thinkers.",
+    "author": {
+      "@type": "Organization",
+      "name": "RevoChamp",
+      "url": "https://revochamp.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "RevoChamp",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://revochamp.com/icons/Icon-192.png"
+      }
+    },
+    "inLanguage": "en",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://revochamp.com/blog/"
+    }
+  }
+  </script>
+
+  <!-- iOS & mobile web app capabilities (enhanced) -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="revochampblog">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="RevoChamp Blog">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>revochampblog</title>
+  <!-- Preconnect for performance (optional but recommended) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+  <!-- Web app manifest -->
   <link rel="manifest" href="manifest.json">
+
+  <!-- Initial Loader + SEO friendly fallback style -->
+  <style>
+    /* RESET & BASE STYLES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f8fafc;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* LOADER CONTAINER - fullscreen overlay with smooth exit */
+    #app-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #f9fafb 0%, #eef2f6 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0.4s;
+      visibility: visible;
+      opacity: 1;
+      backdrop-filter: blur(2px);
+    }
+
+    /* Hide loader gracefully */
+    #app-loader.hide-loader {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Spinner animation */
+    .loader-spinner {
+      width: 64px;
+      height: 64px;
+      border: 6px solid rgba(100, 108, 255, 0.2);
+      border-top: 6px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.4, 0.2, 0.2, 0.8) infinite;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Brand text / loader message */
+    .loader-brand {
+      margin-top: 28px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(120deg, #1e293b, #2d3a4b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+    }
+
+    .loader-sub {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: #475569;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .loader-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #3b82f6;
+      border-radius: 50%;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8);}
+      50% { opacity: 1; transform: scale(1.2);}
+    }
+
+    /* fallback noscript message (if JS is off) */
+    .noscript-message {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: #fffbeb;
+      border-left: 5px solid #f59e0b;
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      color: #92400e;
+      text-align: center;
+      z-index: 10000;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      backdrop-filter: blur(8px);
+      background: rgba(255, 251, 235, 0.95);
+    }
+
+    /* ensure flutter canvas takes full layout without loader blocking */
+    canvas.flutter-engine-canvas {
+      display: block;
+    }
+
+    /* tiny accessibility improvement */
+    @media (prefers-reduced-motion: reduce) {
+      .loader-spinner {
+        animation: none;
+        border-top-color: #3b82f6;
+        transform: rotate(0deg);
+      }
+      #app-loader {
+        transition: none;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- INITIAL LOADER with beautiful animation (hidden after Flutter is ready) -->
+  <div id="app-loader" aria-label="Loading RevoChamp Blog, please wait">
+    <div class="loader-spinner" role="status" aria-hidden="true"></div>
+    <div class="loader-brand">RevoChamp Blog</div>
+    <div class="loader-sub">
+      <span>Loading experience</span>
+      <span class="loader-dot"></span>
+      <span class="loader-dot" style="animation-delay: 0.2s;"></span>
+      <span class="loader-dot" style="animation-delay: 0.4s;"></span>
+    </div>
+  </div>
+
+  <!-- noscript fallback for better user experience & SEO -->
+  <noscript>
+    <div class="noscript-message">
+      ⚡ JavaScript is disabled. For the full interactive experience, please enable JavaScript in your browser.
+      <br>You can still explore our blog content when the app loads.
+    </div>
+  </noscript>
+
+  <!-- Flutter bootstrap script (loads asynchronously) -->
   <script src="flutter_bootstrap.js" async></script>
+
+  <!-- Enhanced loader removal script: detects when Flutter engine renders canvas or replaces DOM -->
+  <script>
+    (function() {
+      // Graceful loader removal once Flutter's canvas (or main flutter root) appears.
+      // This ensures no flicker and perfect UX.
+      const loaderElement = document.getElementById('app-loader');
+      
+      // Function to hide and remove loader smoothly
+      function hideLoader() {
+        if (!loaderElement) return;
+        // Add class to fade out and hide
+        loaderElement.classList.add('hide-loader');
+        // After transition, completely remove from DOM to avoid any interaction
+        setTimeout(() => {
+          if (loaderElement && loaderElement.parentNode) {
+            loaderElement.parentNode.removeChild(loaderElement);
+          }
+        }, 500); // matches transition duration
+      }
+      
+      // Check if Flutter's main visual element already exists (edge case if script runs late)
+      function isFlutterCanvasPresent() {
+        // Flutter web renders a canvas element (usually with class or specific selector)
+        // Also can be a div with id="flutter-view" in some builds, but canvas is universal.
+        const canvas = document.querySelector('canvas');
+        const flutterView = document.getElementById('flutter-view');
+        const flutterContainer = document.querySelector('flutter-view');
+        return !!(canvas || flutterView || flutterContainer);
+      }
+      
+      if (isFlutterCanvasPresent()) {
+        // if canvas already there, hide loader immediately
+        hideLoader();
+        return;
+      }
+      
+      // Use MutationObserver to watch for addition of canvas or flutter root elements
+      const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+          if (mutation.type === 'childList' && mutation.addedNodes.length) {
+            for (const node of mutation.addedNodes) {
+              // check if node is an element
+              if (node.nodeType === 1) {
+                // look for canvas or flutter-view element
+                if (node.tagName === 'CANVAS' || 
+                    node.id === 'flutter-view' || 
+                    node.tagName === 'FLUTTER-VIEW' ||
+                    (node.querySelector && (node.querySelector('canvas') || node.querySelector('#flutter-view')))) {
+                  hideLoader();
+                  observer.disconnect();
+                  return;
+                }
+              }
+            }
+          }
+        }
+      });
+      
+      // Start observing body for new children and subtree changes
+      observer.observe(document.body, { childList: true, subtree: true });
+      
+      // Fallback timer: if after 3.5 seconds no canvas detected, maybe Flutter already started
+      // but canvas could be added later; also if something fails, we still hide after 6 seconds to not block UI.
+      // However we want to ensure we don't block forever in case of error.
+      let fallbackTimer = setTimeout(() => {
+        // if loader still visible and canvas not present but Flutter bootstrap likely failed? hide gracefully.
+        if (loaderElement && !loaderElement.classList.contains('hide-loader')) {
+          // check once more if canvas exists
+          if (isFlutterCanvasPresent()) {
+            hideLoader();
+          } else {
+            // Still no canvas? Could be a delay, but we'll hide to allow fallback content.
+            // But we don't want to hide too early if Flutter takes longer on slow networks.
+            // Wait extra 2 seconds.
+            setTimeout(() => {
+              if (loaderElement && !loaderElement.classList.contains('hide-loader')) {
+                // final check: maybe canvas appears after long delay
+                if (isFlutterCanvasPresent()) {
+                  hideLoader();
+                } else {
+                  // force hide after 8 seconds total to prevent eternal loader.
+                  // Also, Flutter might have rendered a different element (div, etc). Let's just hide to not break UX.
+                  console.warn("Flutter canvas not detected after timeout, hiding loader.");
+                  hideLoader();
+                }
+              }
+            }, 2000);
+          }
+        }
+        clearTimeout(fallbackTimer);
+      }, 4000);
+      
+      // Additionally, listen for Flutter initialization event (if any custom event is triggered).
+      // Some flutter builds dispatch 'flutter-initialized' or similar, but we'll add a safety custom event listener.
+      window.addEventListener('flutter-first-frame', function() {
+        hideLoader();
+        observer.disconnect();
+      });
+      
+      // Also, if the bootstrap script triggers a specific ready state, we can hook into a custom event.
+      // For maximum compatibility, we also check performance: after 'load' event, if canvas still not present,
+      // we give additional chance.
+      window.addEventListener('load', function() {
+        // Wait 500ms after load for any late canvas injection
+        setTimeout(() => {
+          if (loaderElement && !loaderElement.classList.contains('hide-loader') && isFlutterCanvasPresent()) {
+            hideLoader();
+            observer.disconnect();
+          }
+        }, 800);
+      });
+    })();
+  </script>
+
+  <!-- Additional SEO performance hints: preload critical assets & improved LCP -->
+  <link rel="preload" href="flutter_bootstrap.js" as="script">
+  <link rel="preconnect" href="https://region1.google-analytics.com" crossorigin>
+  
+  <!-- Optional: provide a fallback style to ensure page is not empty while flutter loads -->
+  <style>
+    /* ensure body background does not cause white flash, matches loader gradient */
+    body {
+      background: #f1f5f9;
+    }
+    /* make sure that if flutter canvas appears, it takes full space without interference */
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    /* any custom flutter container adjustments */
+    #flutter-view, flutter-view {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
 </body>
 </html>

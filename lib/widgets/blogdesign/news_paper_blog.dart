@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:revochampblog/models/blog_post.dart';
 import 'package:revochampblog/models/content_item.dart';
@@ -26,22 +25,28 @@ class _T {
       GoogleFonts.playfairDisplay(fontSize: size, fontWeight: w, color: ink);
 
   static TextStyle displayItalic(double size) => GoogleFonts.playfairDisplay(
-        fontSize: size,
-        fontStyle: FontStyle.italic,
-        color: ink,
-      );
+    fontSize: size,
+    fontStyle: FontStyle.italic,
+    color: ink,
+  );
 
-  static TextStyle body(double size,
-          {FontWeight w = FontWeight.w300, Color? color}) =>
-      GoogleFonts.dmSans(
-          fontSize: size, fontWeight: w, color: color ?? ink, height: 1.8);
+  static TextStyle body(
+    double size, {
+    FontWeight w = FontWeight.w300,
+    Color? color,
+  }) => GoogleFonts.dmSans(
+    fontSize: size,
+    fontWeight: w,
+    color: color ?? ink,
+    height: 1.8,
+  );
 
   static TextStyle label(double size, {Color? color}) => GoogleFonts.dmSans(
-        fontSize: size,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.14 * size,
-        color: color ?? muted,
-      );
+    fontSize: size,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.14 * size,
+    color: color ?? muted,
+  );
 }
 
 String getJournalName(List<String> categories) {
@@ -83,8 +88,19 @@ String formatCategories(List<String> categories) {
 // }
 String formatDate(DateTime date) {
   const months = [
-    '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    '',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   return '${months[date.month]} ${date.year}';
@@ -147,121 +163,135 @@ class NewspaperBlogDesign1 extends StatelessWidget {
           //   ),
           //   toolbarHeight: 44,
           // ),
-SliverAppBar(
-  pinned: true,
-  backgroundColor: _T.paper,
-  elevation: 0,
-  toolbarHeight: 60,
-  automaticallyImplyLeading: false,
-  flexibleSpace: SafeArea(
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: _T.ink.withOpacity(0.12),
-            width: 1,
-          ),
-        ),
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isMobile = constraints.maxWidth < 600;
-
-          final blog = post;
-
-          final journal = getJournalName(blog.categories);
-          final date = formatDate(blog!.date!);
-          final categoryText = formatCategories(blog.categories);
-
-          return Row(
-            children: [
-              /// LEFT → BRAND
-              Row(
-                children: [
-                  Icon(Icons.bolt_rounded, size: 18, color: _T.accent),
-                  const SizedBox(width: 6),
-                  Text(
-                    'RevoChamp',
-                    style: _T.label(13, color: _T.accent),
-                  ),
-                ],
-              ),
-
-              const Spacer(),
-
-              /// CENTER → JOURNAL + DATE
-              if (!isMobile)
-                Row(
-                  children: [
-                    Text(
-                      journal,
-                      style: _T.label(
-                        11,
-                        color: _T.ink.withOpacity(0.8),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      width: 4,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: _T.ink.withOpacity(0.4),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      date,
-                      style: _T.label(
-                        11,
-                        color: _T.ink.withOpacity(0.6),
-                      ),
-                    ),
-                  ],
+          SliverAppBar(
+            pinned: true,
+            backgroundColor: _T.paper,
+            elevation: 0,
+            toolbarHeight: 60,
+            automaticallyImplyLeading: false,
+            flexibleSpace: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
                 ),
-
-              const Spacer(),
-
-              /// RIGHT → CATEGORY BADGE
-              Row(
-                children: [
-                  if (!isMobile)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: _T.accent.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: _T.accent.withOpacity(0.2),
-                        ),
-                      ),
-                      child: Text(
-                        categoryText,
-                        style: _T.label(10, color: _T.accent),
-                      ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: _T.ink.withValues(alpha: 0.12),
+                      width: 1,
                     ),
+                  ),
+                ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isMobile = constraints.maxWidth < 600;
 
-                  if (isMobile)
-                    Icon(Icons.menu_rounded,
-                        size: 20, color: _T.ink.withOpacity(0.7)),
-                ],
+                    final blog = post;
+
+                    final journal = getJournalName(blog.categories);
+                    final date = formatDate(blog!.date!);
+                    final categoryText = formatCategories(blog.categories);
+
+                    return Row(
+                      children: [
+                        /// LEFT → BRAND
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.bolt_rounded,
+                              size: 18,
+                              color: _T.accent,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'RevoChamp',
+                              style: _T.label(13, color: _T.accent),
+                            ),
+                          ],
+                        ),
+
+                        const Spacer(),
+
+                        /// CENTER → JOURNAL + DATE
+                        if (!isMobile)
+                          Row(
+                            children: [
+                              Text(
+                                journal,
+                                style: _T.label(
+                                  11,
+                                  color: _T.ink.withValues(alpha: 0.8),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Container(
+                                width: 4,
+                                height: 4,
+                                decoration: BoxDecoration(
+                                  color: _T.ink.withValues(alpha: 0.4),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                date,
+                                style: _T.label(
+                                  11,
+                                  color: _T.ink.withValues(alpha: 0.6),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        const Spacer(),
+
+                        /// RIGHT → CATEGORY BADGE
+                        Row(
+                          children: [
+                            if (!isMobile)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _T.accent.withValues(alpha: 0.08),
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    color: _T.accent.withValues(alpha: 0.2),
+                                  ),
+                                ),
+                                child: Text(
+                                  categoryText,
+                                  style: _T.label(10, color: _T.accent),
+                                ),
+                              ),
+
+                            if (isMobile)
+                              Icon(
+                                Icons.menu_rounded,
+                                size: 20,
+                                color: _T.ink.withValues(alpha: 0.7),
+                              ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ],
-          );
-        },
-      ),
-    ),
-  ),
-),
+            ),
+          ),
           SliverToBoxAdapter(
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 1100),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 32,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -279,8 +309,7 @@ SliverAppBar(
                               children: [
                                 Expanded(
                                   flex: 62,
-                                  child: _MainContent(
-                                      post: post, slug: slug),
+                                  child: _MainContent(post: post, slug: slug),
                                 ),
                                 const SizedBox(width: 48),
                                 Expanded(
@@ -290,11 +319,12 @@ SliverAppBar(
                                     scrollController: scrollController,
                                     onRelatedTap: (s) =>
                                         Navigator.pushReplacementNamed(
-                                            context, '/blog/$s'),
-                                    onTagTap: (t) =>
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                                SnackBar(content: Text(t))),
+                                          context,
+                                          '/blog/$s',
+                                        ),
+                                    onTagTap: (t) => ScaffoldMessenger.of(
+                                      context,
+                                    ).showSnackBar(SnackBar(content: Text(t))),
                                   ),
                                 ),
                               ],
@@ -312,7 +342,9 @@ SliverAppBar(
                         _RelatedSection(
                           related: post.related,
                           onTap: (s) => Navigator.pushReplacementNamed(
-                              context, '/blog/$s'),
+                            context,
+                            '/blog/$s',
+                          ),
                         ),
                     ],
                   ),
@@ -498,13 +530,12 @@ class _HeroSection extends StatelessWidget {
     final rightBlock = hasStats
         ? Column(
             children: stats
-                .map((s) => Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: _HeroStat(
-                        value: s.value,
-                        label: s.label,
-                      ),
-                    ))
+                .map(
+                  (s) => Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: _HeroStat(value: s.value, label: s.label),
+                  ),
+                )
                 .toList(),
           )
         : const SizedBox();
@@ -517,7 +548,7 @@ class _HeroSection extends StatelessWidget {
           if (hasStats) ...[
             const SizedBox(width: 40),
             Expanded(flex: 45, child: rightBlock),
-          ]
+          ],
         ],
       );
     }
@@ -530,18 +561,17 @@ class _HeroSection extends StatelessWidget {
           const SizedBox(height: 28),
           Row(
             children: stats
-                .map((s) => Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: _HeroStat(
-                          value: s.value,
-                          label: s.label,
-                        ),
-                      ),
-                    ))
+                .map(
+                  (s) => Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: _HeroStat(value: s.value, label: s.label),
+                    ),
+                  ),
+                )
                 .toList(),
           ),
-        ]
+        ],
       ],
     );
   }
@@ -562,8 +592,10 @@ class _HeroStat extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(value,
-              style: _T.display(28).copyWith(color: _T.accent, height: 1)),
+          Text(
+            value,
+            style: _T.display(28).copyWith(color: _T.accent, height: 1),
+          ),
           const SizedBox(height: 4),
           Text(label, style: _T.body(11, color: _T.muted)),
         ],
@@ -584,8 +616,9 @@ class _MetaChip extends StatelessWidget {
         style: _T.body(13, color: _T.muted),
         children: [
           TextSpan(
-              text: '$label  ',
-              style: const TextStyle(fontWeight: FontWeight.w500)),
+            text: '$label  ',
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
           TextSpan(text: value),
         ],
       ),
@@ -659,15 +692,15 @@ class _MainContent extends StatelessWidget {
 
         case ContentType.table:
           if (item.headers != null && item.rows != null) {
-            widgets.add(_NpTable(
-                headers: item.headers!, rows: item.rows!));
+            widgets.add(_NpTable(headers: item.headers!, rows: item.rows!));
           }
           break;
 
         case ContentType.image:
           if (item.imageUrl != null) {
-            widgets.add(_ContentImage(
-                url: item.imageUrl!, caption: item.caption));
+            widgets.add(
+              _ContentImage(url: item.imageUrl!, caption: item.caption),
+            );
           }
           break;
 
@@ -688,10 +721,12 @@ class _MainContent extends StatelessWidget {
           break;
 
         default:
-          widgets.add(Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Text(item.value, style: _T.body(15)),
-          ));
+          widgets.add(
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Text(item.value, style: _T.body(15)),
+            ),
+          );
       }
     }
     return widgets;
@@ -729,8 +764,10 @@ class _BodyText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paragraphs =
-        text.split('\n\n').where((p) => p.trim().isNotEmpty).toList();
+    final paragraphs = text
+        .split('\n\n')
+        .where((p) => p.trim().isNotEmpty)
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -767,18 +804,12 @@ class _DropCapParagraph extends StatelessWidget {
       children: [
         Text(
           firstChar,
-          style: _T.display(72).copyWith(
-                height: 0.85,
-                color: _T.ink,
-              ),
+          style: _T.display(72).copyWith(height: 0.85, color: _T.ink),
         ),
         const SizedBox(width: 4),
         Expanded(
           child: RichText(
-            text: TextSpan(
-              style: _T.body(15),
-              children: _parseInline(rest),
-            ),
+            text: TextSpan(style: _T.body(15), children: _parseInline(rest)),
           ),
         ),
       ],
@@ -799,14 +830,20 @@ List<InlineSpan> _parseInline(String text) {
     }
     if (m.group(1) != null) {
       // bold
-      spans.add(TextSpan(
+      spans.add(
+        TextSpan(
           text: m.group(1),
-          style: const TextStyle(fontWeight: FontWeight.w600)));
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+      );
     } else if (m.group(2) != null) {
       // italic
-      spans.add(TextSpan(
+      spans.add(
+        TextSpan(
           text: m.group(2),
-          style: const TextStyle(fontStyle: FontStyle.italic)));
+          style: const TextStyle(fontStyle: FontStyle.italic),
+        ),
+      );
     }
     start = m.end;
   }
@@ -821,10 +858,7 @@ class _FeatureList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = raw
-        .split('\n')
-        .where((l) => l.trim().isNotEmpty)
-        .toList();
+    final items = raw.split('\n').where((l) => l.trim().isNotEmpty).toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -832,14 +866,14 @@ class _FeatureList extends StatelessWidget {
         children: items.asMap().entries.map((e) {
           final isFirst = e.key == 0;
           return Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(
-                    color: isFirst ? _T.border : _T.border, width: 0.5),
-                bottom:
-                    const BorderSide(color: _T.border, width: 0.5),
+                  color: isFirst ? _T.border : _T.border,
+                  width: 0.5,
+                ),
+                bottom: const BorderSide(color: _T.border, width: 0.5),
               ),
             ),
             child: Row(
@@ -855,7 +889,9 @@ class _FeatureList extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       style: _T.body(14),
-                      children: _parseInline(e.value.replaceAll(RegExp(r'^[-•]\s*'), '')),
+                      children: _parseInline(
+                        e.value.replaceAll(RegExp(r'^[-•]\s*'), ''),
+                      ),
                     ),
                   ),
                 ),
@@ -879,9 +915,7 @@ class _NpTable extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: _T.border),
-        ),
+        decoration: BoxDecoration(border: Border.all(color: _T.border)),
         child: Column(
           children: [
             // Header row
@@ -894,9 +928,13 @@ class _NpTable extends StatelessWidget {
                     flex: isLast ? 2 : 1,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 10),
-                      child: Text(e.value.toUpperCase(),
-                          style: _T.label(10, color: Colors.white)),
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        e.value.toUpperCase(),
+                        style: _T.label(10, color: Colors.white),
+                      ),
                     ),
                   );
                 }).toList(),
@@ -906,9 +944,7 @@ class _NpTable extends StatelessWidget {
             ...rows.asMap().entries.map((re) {
               final isEven = re.key.isEven;
               return Container(
-                color: isEven
-                    ? Colors.white
-                    : _T.paper,
+                color: isEven ? Colors.white : _T.paper,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: re.value.asMap().entries.map((ce) {
@@ -918,18 +954,20 @@ class _NpTable extends StatelessWidget {
                       flex: isLast ? 2 : 1,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
                           border: Border(
-                              top: BorderSide(
-                                  color: _T.border, width: 0.5)),
+                            top: BorderSide(color: _T.border, width: 0.5),
+                          ),
                         ),
                         child: Text(
                           ce.value,
-                          style: _T.body(13,
-                              w: isFirst
-                                  ? FontWeight.w500
-                                  : FontWeight.w300),
+                          style: _T.body(
+                            13,
+                            w: isFirst ? FontWeight.w500 : FontWeight.w300,
+                          ),
                         ),
                       ),
                     );
@@ -964,21 +1002,22 @@ class _ContentImage extends StatelessWidget {
               fit: BoxFit.cover,
               width: double.infinity,
               placeholder: (_, _) => Container(
-                  height: 200,
-                  color: _T.border,
-                  child: const Center(child: CircularProgressIndicator())),
-              errorWidget: (_, _, _) =>
-                  const Icon(Icons.broken_image),
+                height: 200,
+                color: _T.border,
+                child: const Center(child: CircularProgressIndicator()),
+              ),
+              errorWidget: (_, _, _) => const Icon(Icons.broken_image),
             ),
           ),
           if (caption != null && caption!.isNotEmpty) ...[
             const SizedBox(height: 8),
-            Text(caption!,
-                style: _T.body(12,
-                    color: _T.muted,
-                    w: FontWeight.w300)
-                    .copyWith(fontStyle: FontStyle.italic)),
-          ]
+            Text(
+              caption!,
+              style: _T
+                  .body(12, color: _T.muted, w: FontWeight.w300)
+                  .copyWith(fontStyle: FontStyle.italic),
+            ),
+          ],
         ],
       ),
     );
@@ -992,9 +1031,7 @@ class _InsightBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final clean = text
-        .replaceAll(RegExp(r'💡\s*\*\*.*?\*\*\s*'), '')
-        .trim();
+    final clean = text.replaceAll(RegExp(r'💡\s*\*\*.*?\*\*\s*'), '').trim();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Container(
@@ -1010,8 +1047,9 @@ class _InsightBox extends StatelessWidget {
             const SizedBox(height: 6),
             RichText(
               text: TextSpan(
-                  style: _T.body(14, color: const Color(0xFF3A2820)),
-                  children: _parseInline(clean)),
+                style: _T.body(14, color: const Color(0xFF3A2820)),
+                children: _parseInline(clean),
+              ),
             ),
           ],
         ),
@@ -1061,19 +1099,18 @@ class _WarningBox extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           color: _T.warning,
-          border: Border(
-              left: BorderSide(color: _T.warningBorder, width: 3)),
+          border: Border(left: BorderSide(color: _T.warningBorder, width: 3)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('CRITICAL ERROR',
-                style: _T.label(9, color: _T.warningBorder)),
+            Text('CRITICAL ERROR', style: _T.label(9, color: _T.warningBorder)),
             const SizedBox(height: 6),
             RichText(
               text: TextSpan(
-                  style: _T.body(14, color: const Color(0xFF3A3010)),
-                  children: _parseInline(clean)),
+                style: _T.body(14, color: const Color(0xFF3A3010)),
+                children: _parseInline(clean),
+              ),
             ),
           ],
         ),
@@ -1097,8 +1134,10 @@ class _CtaBlock extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Download the Advanced CRM Playbook',
-                style: _T.display(18).copyWith(color: Colors.white)),
+            Text(
+              'Download the Advanced CRM Playbook',
+              style: _T.display(18).copyWith(color: Colors.white),
+            ),
             const SizedBox(height: 8),
             Text(
               'Includes AI templates, personalization frameworks, and omnichannel checklists. Free access.',
@@ -1109,10 +1148,14 @@ class _CtaBlock extends StatelessWidget {
               onTap: () {},
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 24, vertical: 12),
+                  horizontal: 24,
+                  vertical: 12,
+                ),
                 color: _T.accent,
-                child:
-                    Text('Download Free Playbook →', style: _T.label(12, color: Colors.white)),
+                child: Text(
+                  'Download Free Playbook →',
+                  style: _T.label(12, color: Colors.white),
+                ),
               ),
             ),
           ],
@@ -1165,8 +1208,7 @@ class _Sidebar extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: Text(e.value,
-                          style: _T.body(13, color: _T.ink)),
+                      child: Text(e.value, style: _T.body(13, color: _T.ink)),
                     ),
                   ],
                 ),
@@ -1184,9 +1226,10 @@ class _Sidebar extends StatelessWidget {
           color: _T.ink,
           child: Column(
             children: [
-              Text('40%',
-                  style:
-                      _T.display(48).copyWith(color: _T.accent, height: 1)),
+              Text(
+                '40%',
+                style: _T.display(48).copyWith(color: _T.accent, height: 1),
+              ),
               const SizedBox(height: 6),
               Text(
                 'Improvement in forecast accuracy with AI-powered CRM',
@@ -1216,8 +1259,7 @@ class _Sidebar extends StatelessWidget {
               ),
               _ToolCard(
                 name: 'Zoho CRM',
-                desc:
-                    'Affordable and feature-rich with Zia AI predictions.',
+                desc: 'Affordable and feature-rich with Zia AI predictions.',
               ),
             ],
           ),
@@ -1236,7 +1278,9 @@ class _Sidebar extends StatelessWidget {
                 onTap: () => onTagTap(t),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 4),
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     border: Border.all(color: _T.border),
                   ),
@@ -1261,8 +1305,7 @@ class _Sidebar extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: GestureDetector(
                     onTap: () => onRelatedTap(slug),
-                    child: Text('→  $title',
-                        style: _T.body(13, color: _T.ink)),
+                    child: Text('→  $title', style: _T.body(13, color: _T.ink)),
                   ),
                 );
               }).toList(),
@@ -1299,7 +1342,8 @@ class _SideSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(bottom: 8),
           decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: _T.border))),
+            border: Border(bottom: BorderSide(color: _T.border)),
+          ),
           child: Text(label.toUpperCase(), style: _T.label(10)),
         ),
         const SizedBox(height: 12),
@@ -1319,13 +1363,12 @@ class _ToolCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: const BoxDecoration(
-          border:
-              Border(bottom: BorderSide(color: _T.border, width: 0.5))),
+        border: Border(bottom: BorderSide(color: _T.border, width: 0.5)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(name,
-              style: _T.body(14, w: FontWeight.w500)),
+          Text(name, style: _T.body(14, w: FontWeight.w500)),
           const SizedBox(height: 2),
           Text(desc, style: _T.body(12, color: _T.muted)),
         ],
@@ -1351,10 +1394,14 @@ class _NewsletterBoxState extends State<_NewsletterBox> {
           ? Container(
               padding: const EdgeInsets.all(14),
               color: _T.success,
-              child: Text('You\'re subscribed!',
-                  style: _T.body(13,
-                      color: const Color(0xFF3B6D11),
-                      w: FontWeight.w500)),
+              child: Text(
+                'You\'re subscribed!',
+                style: _T.body(
+                  13,
+                  color: const Color(0xFF3B6D11),
+                  w: FontWeight.w500,
+                ),
+              ),
             )
           : Column(
               children: [
@@ -1365,11 +1412,12 @@ class _NewsletterBoxState extends State<_NewsletterBox> {
                     hintText: 'Your email address',
                     hintStyle: _T.body(13, color: _T.muted),
                     contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.zero,
-                      borderSide:
-                          const BorderSide(color: _T.border),
+                      borderSide: const BorderSide(color: _T.border),
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.zero,
@@ -1377,8 +1425,7 @@ class _NewsletterBoxState extends State<_NewsletterBox> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.zero,
-                      borderSide:
-                          const BorderSide(color: _T.border),
+                      borderSide: const BorderSide(color: _T.border),
                     ),
                     filled: true,
                     fillColor: Colors.white,
@@ -1395,9 +1442,11 @@ class _NewsletterBoxState extends State<_NewsletterBox> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 11),
                     color: _T.ink,
-                    child: Text('SUBSCRIBE',
-                        textAlign: TextAlign.center,
-                        style: _T.label(11, color: Colors.white)),
+                    child: Text(
+                      'SUBSCRIBE',
+                      textAlign: TextAlign.center,
+                      style: _T.label(11, color: Colors.white),
+                    ),
                   ),
                 ),
               ],
@@ -1429,16 +1478,14 @@ class _FaqSectionState extends State<_FaqSection> {
         children: [
           const Divider(thickness: 1.5, color: _T.ink),
           const SizedBox(height: 20),
-          Text('Frequently Asked Questions',
-              style: _T.display(22)),
+          Text('Frequently Asked Questions', style: _T.display(22)),
           const SizedBox(height: 20),
           ...widget.faq.asMap().entries.map((e) {
             final isOpen = _open == e.key;
             return Column(
               children: [
                 InkWell(
-                  onTap: () =>
-                      setState(() => _open = isOpen ? null : e.key),
+                  onTap: () => setState(() => _open = isOpen ? null : e.key),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     child: Row(
@@ -1450,14 +1497,17 @@ class _FaqSectionState extends State<_FaqSection> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                                color: isOpen ? _T.accent : _T.border),
+                              color: isOpen ? _T.accent : _T.border,
+                            ),
                           ),
                           child: Center(
                             child: Text(
                               '${e.key + 1}',
-                              style: _T.body(12,
-                                  color: isOpen ? _T.accent : _T.muted,
-                                  w: FontWeight.w500),
+                              style: _T.body(
+                                12,
+                                color: isOpen ? _T.accent : _T.muted,
+                                w: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
@@ -1471,8 +1521,10 @@ class _FaqSectionState extends State<_FaqSection> {
                         AnimatedRotation(
                           turns: isOpen ? 0.5 : 0,
                           duration: const Duration(milliseconds: 220),
-                          child: Icon(Icons.expand_more,
-                              color: isOpen ? _T.accent : _T.muted),
+                          child: Icon(
+                            Icons.expand_more,
+                            color: isOpen ? _T.accent : _T.muted,
+                          ),
                         ),
                       ],
                     ),
@@ -1481,10 +1533,15 @@ class _FaqSectionState extends State<_FaqSection> {
                 AnimatedCrossFade(
                   firstChild: const SizedBox.shrink(),
                   secondChild: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 42, bottom: 16, right: 24),
-                    child: Text(e.value['answer'] ?? '',
-                        style: _T.body(14, color: _T.muted)),
+                    padding: const EdgeInsets.only(
+                      left: 42,
+                      bottom: 16,
+                      right: 24,
+                    ),
+                    child: Text(
+                      e.value['answer'] ?? '',
+                      style: _T.body(14, color: _T.muted),
+                    ),
                   ),
                   crossFadeState: isOpen
                       ? CrossFadeState.showSecond
@@ -1524,28 +1581,31 @@ class _RelatedSection extends StatelessWidget {
         children: [
           const Divider(thickness: 1.5, color: _T.ink),
           const SizedBox(height: 20),
-          Text('Related Articles'.toUpperCase(),
-              style: _T.label(12, color: _T.ink)),
+          Text(
+            'Related Articles'.toUpperCase(),
+            style: _T.label(12, color: _T.ink),
+          ),
           const SizedBox(height: 16),
-          ...related.map((slug) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: InkWell(
-                  onTap: () => onTap(slug),
-                  child: Row(
-                    children: [
-                      Container(
-                          width: 4, height: 4, color: _T.accent),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(_format(slug),
-                            style: _T.body(14,
-                                w: FontWeight.w500,
-                                color: _T.ink)),
+          ...related.map(
+            (slug) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: InkWell(
+                onTap: () => onTap(slug),
+                child: Row(
+                  children: [
+                    Container(width: 4, height: 4, color: _T.accent),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        _format(slug),
+                        style: _T.body(14, w: FontWeight.w500, color: _T.ink),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );

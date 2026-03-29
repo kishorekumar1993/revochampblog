@@ -6,11 +6,11 @@ class TagChips extends StatelessWidget {
   final void Function(String)? onTagPressed;
 
   const TagChips({
-    Key? key,
+    super.key,
     required this.tags,
     this.backgroundColor,
     this.onTagPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

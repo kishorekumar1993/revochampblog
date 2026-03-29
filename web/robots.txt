@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /tech/
+Allow: /assets/
+Allow: /build/
+
+Sitemap: https://revochamp.site/blog/sitemap.xml
