@@ -61,6 +61,7 @@ class _BlogPageState extends State<BlogPage> {
     if (_cache.containsKey(slug)) {
       final post = _cache.remove(slug)!;
       _cache[slug] = post;
+      print(post);
       _updateSEO(post);
       return post;
     }

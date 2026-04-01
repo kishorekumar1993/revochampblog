@@ -75,18 +75,53 @@ class BlogListPage extends StatefulWidget {
 }
 
 class _BlogListPageState extends State<BlogListPage> {
-  List<BlogSummary> _all = [];
+  // List<BlogSummary> _all = [];
+  
   List<BlogSummary> _filtered = [];
   String _query = '';
   String? _activeCategory;
   bool _loading = true;
   String? _error;
+List<BlogSummary> _blogs = [];
 
-  final _scroll = ScrollController();
+String _selectedCategory = "All";
+
+int _page = 1;
+bool _hasMore = true;
+
+// bool _loading = false;
+// String? _error;
+  // final _scroll = ScrollController();
   final _search = TextEditingController();
   final _service = BlogService();
 
-  static const _categories = ['Latest', 'Strategy', 'AI', 'Product', 'Design'];
+  static const _categories =
+  [
+   "Technology",
+    "Ai",
+    "Business",
+    "Finance",
+    "Insurance",
+    "Startups",
+    "Politics",
+    "International",
+    "Health",
+    "Education",
+    "Entertainment",
+    "Consumer"
+  ];
+  //  [
+  //   'All',
+  //   'CRM',
+  //   'Insurance',
+  //   'Finance',
+  //   'Technology',
+  //   'AI',
+  //   'Business',
+  //   'Marketing',
+  //   'Product',
+  //   'Startups',
+  // ];
 
   @override
   void initState() {
@@ -96,32 +131,200 @@ class _BlogListPageState extends State<BlogListPage> {
 
   @override
   void dispose() {
-    _scroll.dispose();
+    // _scroll.dispose();
     _search.dispose();
     super.dispose();
   }
 
-  Future<void> _fetch() async {
-    setState(() { _loading = true; _error = null; });
+
+Future<void> _fetch() async {
+  setState(() {
+    _loading = true;
+    _error = null;
+    _page = 1;
+    _blogs.clear();
+    _hasMore = true;
+  });
+
+  try {
+    final response = await _service.fetchPage(_page);
+
+    setState(() {
+      _blogs = response.data;
+      _hasMore = response.page < response.totalPages;
+      _page++;
+      _loading = false;
+    });
+
+    _applyFilter(); // ✅ IMPORTANT FIX
+  } catch (e) {
+    setState(() {
+      _error = 'Failed to load posts';
+      _loading = false;
+    });
+  }
+}
+void _applyFilter() {
+  var list = _blogs;
+print("Kishore Kumar 6");
+ 
+  // if (_activeCategory != null && _activeCategory != 'All') {
+  //   list = list.where((p) =>
+  //     p.category != null &&
+  //     p.category!.toLowerCase() == _activeCategory!.toLowerCase()
+  //   ).toList();
+  // }
+
+  if (_query.isNotEmpty) {
+    list = list.where((p) =>
+      p.title.toLowerCase().contains(_query.toLowerCase()) ||
+      p.summary.toLowerCase().contains(_query.toLowerCase())
+    ).toList();
+  }
+
+  // ✅ FIXED LOG
+  debugPrint("Category: $_activeCategory | Count: ${list.length}");
+
+  setState(() => _filtered = list);
+print("Kishore Kumar 7 ${_filtered.length}");
+
+}
+// Future<void> _fetch() async {
+//   setState(() {
+//     _loading = true;
+//     _error = null;
+//     _page = 1;
+//     _blogs.clear();
+//     _hasMore = true;
+//   });
+
+//   try {
+//     final response = await _service.fetchPage(_page);
+
+//     setState(() {
+//       _blogs = response.data;
+//       _hasMore = response.page < response.totalPages;
+//       _page++;
+//       _loading = false;
+//     });
+//   } catch (e) {
+//     setState(() {
+//       _error = 'Failed to load posts';
+//       _loading = false;
+//     });
+//   }
+// }
+
+//   void _applyFilter() {
+//     var list = _blogs;
+//   //  var list = _all;
+
+//     // Apply category filter
+//     if (_activeCategory != null && _activeCategory != 'All') {
+//       list = list.where((p) =>
+//         p.category != null && 
+//         p.category!.toLowerCase() == _activeCategory!.toLowerCase()
+//       ).toList();
+//     }
+// print("${_activeCategory} IS  ${list}");
+//     // Apply search filter
+//     if (_query.isNotEmpty) {
+//       list = list.where((p) =>
+//         p.title.toLowerCase().contains(_query.toLowerCase()) ||
+//         p.summary.toLowerCase().contains(_query.toLowerCase())
+//       ).toList();
+//     }
+
+//     setState(() => _filtered = list);
+//   }
+
+  // void _updateCategory(String? category) {
+  //   setState(() {
+  //     _activeCategory = category;
+  //     _applyFilter();
+  //   });
+  // }
+
+  void _updateCategory(String? category) async {
+  setState(() {
+    _activeCategory = category;
+    _loading = true;
+    _error = null;
+    _page = 1;
+    _blogs.clear();
+  });
+print("Kishore Kumar 1");
+  try {
+    BlogResponse response;
+print("Kishore Kumar 2");
+
+    if (category == null || category == 'All') {
+print("Kishore Kumar 3");
+
+      // ✅ LOAD ALL BLOGS
+      response = await _service.fetchPage(1);
+    } else {
+print("Kishore Kumar 4");
+
+      // ✅ LOAD CATEGORY BLOGS
+      response = await _service.fetchByCategory(category.toLowerCase(), page: 1);
+print("Kishore Kumar 5 $response");
+    }
+
+    setState(() {
+      _blogs = response.data;
+      _hasMore = response.page < response.totalPages;
+      _page = 2;
+      _loading = false;
+    });
+
+    _applyFilter(); // optional (for search)
+  } catch (e) {
+    setState(() {
+      _error = 'Failed to load category';
+      _loading = false;
+    });
+  }
+}
+  // Add pagination for loading more
+  Future<void> _loadMore() async {
+    if (!_hasMore || _loading) return;
+
+    setState(() {
+      _loading = true;
+    });
+
     try {
-      final posts = await _service.fetchPage(1);
-      _all = posts;
+      BlogResponse response;
+      
+      if (_activeCategory != null && _activeCategory != 'All') {
+        response = await _service.fetchByCategory(_activeCategory!, page: _page);
+      } else {
+        response = await _service.fetchPage(_page);
+      }
+
+      setState(() {
+        _blogs.addAll(response.data);
+        _hasMore = response.page < response.totalPages;
+        _page++;
+        _loading = false;
+      });
+      
       _applyFilter();
-      setState(() => _loading = false);
+      
     } catch (e) {
-      setState(() { _error = 'Failed to load posts'; _loading = false; });
+      setState(() {
+        _error = 'Failed to load more posts';
+        _loading = false;
+      });
     }
   }
 
-  void _applyFilter() {
-    var list = _all;
-    if (_query.isNotEmpty) {
-      list = list.where((p) =>
-        p.title.toLowerCase().contains(_query.toLowerCase()) ||
-        p.summary.toLowerCase().contains(_query.toLowerCase()),
-      ).toList();
-    }
-    _filtered = list;
+  void _updateSearch(String query) {
+    setState(() {
+      _query = query;
+      _applyFilter();
+    });
   }
 
   @override
@@ -129,20 +332,22 @@ class _BlogListPageState extends State<BlogListPage> {
     return Scaffold(
       backgroundColor: _T.paper,
       body: NestedScrollView(
-        controller: _scroll,
+        // controller: _scroll,
         headerSliverBuilder: (_, _) => [
           SliverToBoxAdapter(
             child: Column(
               children: [
                 _MastheadBar(
-                  onSearch: (q) => setState(() { _query = q; _applyFilter(); }),
+                  onSearch: _updateSearch,
                   searchController: _search,
-                  allPosts: _all,
+                  allPosts: _blogs,
+                  // allPosts: _all,
                 ),
                 _HeroSection(
                   categories: _categories,
                   activeCategory: _activeCategory,
-                  onCategorySelect: (c) => setState(() { _activeCategory = c; }),
+                  onCategorySelect: _updateCategory,
+                  filteredCount: _filtered.length,
                 ),
               ],
             ),
@@ -221,14 +426,19 @@ class _BlogListPageState extends State<BlogListPage> {
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text('No results', style: _T.serif(28)),
         const SizedBox(height: 8),
-        Text('Try a different search term.',
+        Text('Try a different search term or category.',
             style: _T.body(13, color: _T.muted)),
         const SizedBox(height: 24),
         _PillButton(
-          label: 'Clear search',
-          onTap: () => setState(() {
-            _query = ''; _search.clear(); _applyFilter();
-          }),
+          label: 'Reset filters',
+          onTap: () {
+            _search.clear();
+            setState(() {
+              _query = '';
+              _activeCategory = null;
+              _applyFilter();
+            });
+          },
         ),
       ]),
     ),
@@ -317,7 +527,7 @@ class _MastheadBar extends StatelessWidget {
   }
 
   List<Widget> _navItems(BuildContext context) {
-    const items = ['All', 'Strategy', 'Technology', 'Design', 'Business'];
+    const items = ['All', 'CRM', 'Technology', 'AI', 'Business'];
     return items.map((item) => Padding(
       padding: const EdgeInsets.only(right: 20),
       child: Text(
@@ -349,17 +559,20 @@ class _HeroSection extends StatelessWidget {
   final List<String> categories;
   final String? activeCategory;
   final ValueChanged<String?> onCategorySelect;
+  final int filteredCount;
 
   const _HeroSection({
     required this.categories,
     required this.activeCategory,
     required this.onCategorySelect,
+    required this.filteredCount,
   });
 
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final isMobile = w < 700;
+    final displayCategory = activeCategory ?? 'All';
 
     return Container(
       width: double.infinity,
@@ -378,7 +591,7 @@ class _HeroSection extends StatelessWidget {
               height: 0.5,
               color: const Color(0xFF222220),
             )),
-            Text('48 total articles',
+            Text('$filteredCount articles',
                 style: _T.syne(8, color: const Color(0xFF444440))),
           ]),
         ),
@@ -394,7 +607,7 @@ class _HeroSection extends StatelessWidget {
             child: RichText(
               text: TextSpan(children: [
                 TextSpan(
-                  text: 'All ',
+                  text: '$displayCategory ',
                   style: _T.serif(
                     isMobile ? 44 : 62,
                     w: FontWeight.w700,
@@ -422,7 +635,7 @@ class _HeroSection extends StatelessWidget {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Insights, ideas and practical guides across technology, strategy, and modern design.',
+              _getHeadlineDescription(displayCategory),
               style: _T.body(13, color: Colors.white.withValues(alpha: 0.4), height: 1.6),
             ),
           ),
@@ -442,15 +655,31 @@ class _HeroSection extends StatelessWidget {
               children: categories.map((cat) => _CategoryChip(
                 label: cat,
                 isActive: activeCategory == null
-                    ? cat == 'Latest'
+                    ? cat == 'All'
                     : activeCategory == cat,
-                onTap: () => onCategorySelect(cat == 'Latest' ? null : cat),
+                onTap: () => onCategorySelect(cat == 'All' ? null : cat),
               )).toList(),
             ),
           ),
         ),
       ]),
     );
+  }
+
+  String _getHeadlineDescription(String category) {
+    final descriptions = {
+      'All': 'Insights, ideas and practical guides across technology, strategy, and modern design.',
+      'CRM': 'Explore customer relationship management strategies and best practices.',
+      'Insurance': 'Insights into insurance industry trends, products, and innovations.',
+      'Finance': 'Financial guidance, investment strategies, and market analysis.',
+      'Technology': 'Latest tech trends, tools, and digital transformation insights.',
+      'AI': 'Artificial intelligence advancements, applications, and implications.',
+      'Business': 'Business strategies, entrepreneurship, and organizational growth.',
+      'Marketing': 'Marketing campaigns, digital strategies, and brand insights.',
+      'Product': 'Product development, management, and launch strategies.',
+      'Startups': 'Startup tips, funding guides, and entrepreneurial journeys.',
+    };
+    return descriptions[category] ?? 'Browse articles in this category.';
   }
 
   String _formatEditionDate() {
@@ -609,8 +838,7 @@ class _FeatureCardState extends State<_FeatureCard> {
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
       child: GestureDetector(
-        onTap: () => context.go('/${p.slug}'),
-        // onTap: () => Navigator.pushNamed(context, '/blog/${p.slug}'),
+        onTap: () => context.go('/blog/${p.slug}'),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -645,7 +873,7 @@ class _FeatureCardState extends State<_FeatureCard> {
             const SizedBox(height: 20),
 
             // Tag
-            _TagPill(label: 'Featured'),
+            _TagPill(label: p.category ?? 'Featured'),
             const SizedBox(height: 12),
 
             // Title
@@ -699,8 +927,7 @@ class _SidebarCardState extends State<_SidebarCard> {
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
       child: GestureDetector(
-        onTap: () => context.go('/${p.slug}'),
-        // onTap: () => Navigator.pushNamed(context, '/blog/${p.slug}'),
+        onTap: () => context.go('/blog/${p.slug}'),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 22),
           child: Row(
@@ -739,7 +966,7 @@ class _SidebarCardState extends State<_SidebarCard> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 6, vertical: 2),
                         color: _T.redPale,
-                        child: Text('ARTICLE',
+                        child: Text((p.category ?? 'ARTICLE').toUpperCase(),
                             style: _T.syne(7.5,
                                 w: FontWeight.w600, color: _T.red)),
                       ),
@@ -793,8 +1020,7 @@ class _ListCardState extends State<_ListCard> {
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
       child: GestureDetector(
-        // onTap: () => Navigator.pushNamed(context, '/blog/${p.slug}'),
-        onTap: () => context.go('/${p.slug}'),
+        onTap: () => context.go('/blog/${p.slug}'),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           color: _hover ? _T.cream : Colors.transparent,
@@ -806,7 +1032,7 @@ class _ListCardState extends State<_ListCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _TagPill(label: 'Article'),
+                    _TagPill(label: p.category ?? 'Article'),
                     const SizedBox(height: 8),
                     AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 180),
@@ -864,8 +1090,7 @@ class _GridCardState extends State<_GridCard> {
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
       child: GestureDetector(
-        onTap: () => context.go('/${p.slug}'),
-        // onTap: () => Navigator.pushNamed(context, '/blog/${p.slug}'),
+        onTap: () => context.go('/blog/${p.slug}'),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           color: _hover ? _T.cream : _T.paper,
@@ -888,7 +1113,7 @@ class _GridCardState extends State<_GridCard> {
                 Container(height: 120, width: double.infinity, color: _T.cream),
 
               const SizedBox(height: 14),
-              _TagPill(label: 'Article'),
+              _TagPill(label: p.category ?? 'Article'),
               const SizedBox(height: 10),
 
               Expanded(
@@ -914,8 +1139,6 @@ class _GridCardState extends State<_GridCard> {
                     width: 24,
                     height: 24,
                     color: _hover ? _T.red : Colors.transparent,
-                    // child: Border.all(
-                    //     color: _hover ? _T.red : _T.border, width: 0.5),
                     alignment: Alignment.center,
                     child: Text('→',
                         style: _T.body(10,
@@ -1043,8 +1266,7 @@ class _SearchDialogState extends State<_SearchDialog> {
                             style: _T.body(14, color: _T.border)),
                         onTap: () {
                           Navigator.pop(context);
-                          // Navigator.pushNamed(context, '/blog/${p.slug}');
-                     context.go('/${p.slug}');
+                          context.go('/blog/${p.slug}');
                         },
                       );
                     },

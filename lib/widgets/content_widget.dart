@@ -96,6 +96,9 @@ class ContentItemWidget extends StatelessWidget {
 
       case ContentType.cta:
         return NpCtaBlock(text: item.value);
+      case ContentType.featureBox:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 }

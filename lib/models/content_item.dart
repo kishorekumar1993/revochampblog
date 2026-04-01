@@ -1,4 +1,4 @@
-enum ContentType { heading, text, code, list, image,table,highlight,tip,warning,cta  }
+enum ContentType { heading, text, code, list, image,table,highlight,tip,warning,cta,featureBox  }
 
 class ContentItem {
   final ContentType type;
